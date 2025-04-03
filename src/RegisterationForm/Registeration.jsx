@@ -56,7 +56,7 @@ function Registeration() {
         sessionStorage.getItem("registrations") || "[]"
       );
 
-      // Add new registration
+      // Add new registrationkjkbkjbkjbkb
       existingRegistrations.push(registrationData);
 
       // Save back to sessionStorage
