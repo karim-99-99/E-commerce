@@ -15,7 +15,7 @@ function Home() {
         alt="e-commerce photo"
       />
         <Link to="/Service">View Items</Link>
-        <Link to="/newItem">Add Your Item</Link>
+        <Link to="/AddItem">Add Your Item</Link>
 
         </div>
   );
