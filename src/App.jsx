@@ -5,10 +5,13 @@ import Service from "./components/Service";
 import About from "./components/About";
 import Registeration from "./RegisterationForm/Registeration";
 import AddItem from "./RegisterationForm/addItem";
+import Dinamic from "./dinamicList/Dinamic";
 function App() {
   return (
     <div>
       <Router>
+      {/* <Dinamic /> */}
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

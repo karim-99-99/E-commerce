@@ -2,22 +2,49 @@ import React from "react";
 import { Link } from "react-router-dom";
 function Home() {
   return (
-    <div>
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/About">About</Link>
-        <Link to="/Service">Service</Link>
+    <div className="min-h-screen w-full">
+      <nav className="grid grid-cols-3 w-80 ml-auto text-orange-600 text-xl font-semibold ">
+        <Link to="/" className="">
+          Home
+        </Link>
+        <Link to="/service">Service</Link>
+        <Link to="/about">About</Link>
       </nav>
-      <h1>Shop House</h1>
-      <p> what ever you wish you will find in our store</p>
-      <img
-        src="https://f.hellowork.com/blogdumoderateur/2023/05/ECommerce-Fevad-2023-.jpg"
-        alt="e-commerce photo"
-      />
-        <Link to="/Service">View Items</Link>
-        <Link to="/AddItem">Add Your Item</Link>
+      <div className="grid grid-cols-1 md:grid-cols-2 pt-10">
 
+        <div className="">
+          <h1 className="text-7xl md:text-8xl md:pt-20 font-bold text-left ">
+            Shop <br />
+            House
+          </h1>
+          <p className="text-2xl md:text-3xl t-8 leading-loose text-left">
+            {" "}
+            what ever you wish
+            <br /> you will find in our store
+          </p>
         </div>
+        <img
+          src="https://f.hellowork.com/blogdumoderateur/2023/05/ECommerce-Fevad-2023-.jpg"
+          alt="e-commerce photo"
+          className="rounded-3xl "
+        />
+      </div>
+
+      <div className="flex gap-12 md:gap-96 justify-center pt-10 sm:gap-32 ">
+        <Link
+          className=" text-orange-600 text-xl font-semibold shadow-xl rounded-xl w-32  md:h-10 pt-1 bg-gray-300"
+          to="/service"
+        >
+          View Items
+        </Link>
+        <Link
+          className=" text-orange-600 text-xl font-semibold shadow-xl rounded-xl w-40 md:h-10 pt-1 bg-gray-300"
+          to="/add-item"
+        >
+          Add Your Item
+        </Link>
+      </div>
+    </div>
   );
 }
 
