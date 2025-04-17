@@ -11,7 +11,6 @@ function Home() {
         <Link to="/about">About</Link>
       </nav>
       <div className="grid grid-cols-1 md:grid-cols-2 pt-10">
-
         <div className="">
           <h1 className="text-7xl md:text-8xl md:pt-20 font-bold text-left ">
             Shop <br />
@@ -32,17 +31,19 @@ function Home() {
 
       <div className="flex gap-12 md:gap-96 justify-center pt-10 sm:gap-32 ">
         <Link
-          className=" text-orange-600 text-xl font-semibold shadow-xl rounded-xl w-32  md:h-10 pt-1 bg-gray-300"
+          className=" text-orange-600 text-xl font-semibold shadow-xl rounded-xl w-32  md:h-10 pt-1 bg-gray-300 w-56"
           to="/service"
         >
           View Items
         </Link>
         <Link
-          className=" text-orange-600 text-xl font-semibold shadow-xl rounded-xl w-40 md:h-10 pt-1 bg-gray-300"
+          className=" text-orange-600 text-xl font-semibold shadow-xl rounded-xl w-32  md:h-10 pt-1 bg-gray-300 w-56"
           to="/add-item"
         >
-          Add Your Item
+          Add-Item
         </Link>
+      
+        
       </div>
     </div>
   );
