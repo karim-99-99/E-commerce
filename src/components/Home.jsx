@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 function Home() {
   return (
-    <div className="min-h-screen w-full">
+    <div className="min-h-screen w-full ">
       <nav className="grid grid-cols-3 w-80 ml-auto text-orange-600 text-xl font-semibold ">
         <Link to="/" className="">
           Home
@@ -34,13 +34,13 @@ function Home() {
           className=" text-orange-600 text-xl font-semibold shadow-xl rounded-xl w-32  md:h-10 pt-1 bg-gray-300 w-56"
           to="/service"
         >
-          View Items
+          Buy Products
         </Link>
         <Link
           className=" text-orange-600 text-xl font-semibold shadow-xl rounded-xl w-32  md:h-10 pt-1 bg-gray-300 w-56"
           to="/add-item"
         >
-          Add-Item
+          Sell Products
         </Link>
       
         

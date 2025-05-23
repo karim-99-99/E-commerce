@@ -56,20 +56,20 @@ function Service() {
   return (
     <div>
       <nav className="flex justify-end gap-5 text-orange-600  font-semibold">
-        <Link to="/">Home</Link>
-        <Link to="/Service">Service</Link>
-        <Link to="/about">About</Link>
+        <Link to="/" className="text-lg">Home</Link>
+        <Link to="/Service" className="text-lg">Service</Link>
+        <Link to="/about" className="text-lg">About</Link>
         <input
           type="text"
-          placeholder="Search categories..."
+          placeholder="Search..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="hidden sm:block rounded-3xl w-28   text-sm text-orange-600"
+          className="hidden sm:block rounded-3xl w-28 p-1  focus:outline-none border border-orange-700   text-sm text-orange-600"
         />
         <select
           value={selectCategory}
           onChange={(e) => setSelectCategory(e.target.value)}
-          className=" w-12 rounded-full "
+          className="  focus:outline-none rounded-full w-14 sm:w-auto"
         >
           {filteredCategories.map((category) => (
             <option key={category} value={category}>
