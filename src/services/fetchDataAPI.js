@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const FAKE_STORE_API = "https://fakestoreapi.com/products";
+// const FAKE_STORE_API = "https://fakestoreapi.com/products";
+const FAKE_STORE_API =  "http://127.0.0.1:8000/api/";
+
 
 export const fetchData = async () => {
   try {
