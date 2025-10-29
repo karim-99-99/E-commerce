@@ -1,122 +1,146 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import UploadPhoto from "../Features/UploadPhoto";
+import { addProduct, fetchCategories } from "../services/api";
+
 function AddItem() {
-  const [input, setinput] = useState({
+  const [input, setInput] = useState({
     name: "",
     description: "",
     category: "",
     Photo: "",
   });
-  const [error, seterror] = useState({});
+  const [categories, setCategories] = useState([]);
+  const [error, setError] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
 
-  const handlesubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let newErrors = {};
     let isValid = true;
+
     if (!input.name.trim()) {
-      newErrors.name = "Please Enter Your Name";
+      newErrors.name = "Please enter a name";
       isValid = false;
     }
-    if (!input.description) {
-      newErrors.Describtion = "Please Enter Your Describtion";
+    if (!input.description.trim()) {
+      newErrors.description = "Please enter a description";
       isValid = false;
     }
     if (!input.category) {
-      newErrors.category = "Please Enter Your category";
+      newErrors.category = "Please select a category";
       isValid = false;
     }
     if (!input.Photo) {
-      newErrors.Photo = "Please Enter Your Photo";
+      newErrors.Photo = "Please upload a photo";
       isValid = false;
     }
-    seterror(newErrors);
-    if (isValid) {
-      const registrationData = {
-        name: input.name,
-        Describtion: input.Describtion,
-        category: input.category,
-        Photo: input.Photo,
-        timestamp: new Date().toISOString(),
-      };
-      sessionStorage.setItem(
-        "registrationData",
-        JSON.stringify(registrationData)
-      );
 
-      setSuccessMessage("Data has been successfully stored in sessionStorage.");
-      setinput({
-        name: "",
-        Describtion: "",
-        categary: "",
-        Photo: "",
+    setError(newErrors);
+    if (!isValid) return;
+
+    try {
+      const formData = new FormData();
+      formData.append("name", input.name);
+      formData.append("description", input.description);
+      formData.append("price", 10);
+      formData.append("stock_quantity", 1);
+      formData.append("category_id", Number(input.category)); // ensure number
+      formData.append("image", input.Photo);
+
+      await addProduct(formData);
+      setSuccessMessage("✅ Product added successfully!");
+      setInput({ name: "", description: "", category: "", Photo: "" });
+    } catch (err) {
+      console.error("Error adding product:", err.response?.data || err.message);
+      setError({
+        submit: "Failed to add product. Make sure you’re logged in.",
       });
     }
   };
 
-  const handlechange = (e) => {
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const res = await fetchCategories();
+        setCategories(res.data);
+      } catch (err) {
+        console.error("Error loading categories:", err.message);
+      }
+    };
+    loadCategories();
+  }, []);
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setinput((prevstate) => ({ ...prevstate, [name]: value }));
+    setInput((prev) => ({ ...prev, [name]: value }));
   };
+
   return (
     <div>
-      <nav className="grid grid-cols-3 w-80 ml-auto text-orange-600 text-xl font-semibold ">
-        <Link to="/" className="">
-          Home
-        </Link>
+      <nav className="grid grid-cols-3 w-80 ml-auto text-orange-600 text-xl font-semibold">
+        <Link to="/">Home</Link>
         <Link to="/service">Service</Link>
         <Link to="/about">About</Link>
       </nav>
 
       <form
-        onSubmit={handlesubmit}
+        onSubmit={handleSubmit}
         className="flex flex-col w-3/5 mt-10 gap-4 mx-auto"
       >
-        <label htmlFor="name" className=" font-semibold ">
-          Name
-        </label>
+        <label className="font-semibold">Name</label>
         <input
           type="text"
           name="name"
           value={input.name}
-          onChange={handlechange}
-          placeholder="Name"
+          onChange={handleChange}
+          placeholder="Product name"
           className="border-2 border-gray-300 rounded-md p-2"
         />
-        {error?.name && <p> {error.name}</p>}
-        <label htmlFor="Describtion" className=" font-semibold ">
-          Describtion
-        </label>
-        <textarea
-          type="text"
-          name="description"
-          value={input.Describtion}
-          onChange={handlechange}
-          placeholder="Describtion"
-          className="border-2 border-gray-300 rounded-md p-2"
+        {error?.name && <p className="text-red-500">{error.name}</p>}
 
+        <label className="font-semibold">Description</label>
+        <textarea
+          name="description"
+          value={input.description}
+          onChange={handleChange}
+          placeholder="Description"
+          className="border-2 border-gray-300 rounded-md p-2"
         />
-        {error?.Describtion && <p> {error.Describtion}</p>}
-        <label htmlFor="category" className=" font-semibold ">
-          Category
-        </label>
-        <input
-          type="text"
+        {error?.description && <p className="text-red-500">{error.description}</p>}
+
+        <label className="font-semibold">Category</label>
+        <select
           name="category"
           value={input.category}
-          onChange={handlechange}
-          placeholder="categary"
+          onChange={handleChange}
           className="border-2 border-gray-300 rounded-md p-2"
+        >
+          <option value="">Select category</option>
+          {categories.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
+        {error?.category && <p className="text-red-500">{error.category}</p>}
 
+        <label className="font-semibold">Upload your Photo</label>
+        <UploadPhoto
+          onPhotoSelect={(file) =>
+            setInput((prev) => ({ ...prev, Photo: file }))
+          }
         />
-        {error.category && <p> {error.category}</p>}
-        <label className=" font-semibold ">Upload your Photo</label>
-      <UploadPhoto />
-        {error?.Photo && <p> {error.Photo}</p>}
-        <button type="submit" className="border-2 border-orange-500 bg-orange-500 rounded-md p-2 font-semibold">Submit</button>
-        {successMessage && <p>{successMessage}</p>}
+        {error?.Photo && <p className="text-red-500">{error.Photo}</p>}
+
+        <button
+          type="submit"
+          className="border-2 border-orange-500 bg-orange-500 rounded-md p-2 font-semibold text-white hover:bg-orange-600"
+        >
+          Submit
+        </button>
+
+        {successMessage && <p className="text-green-600">{successMessage}</p>}
       </form>
     </div>
   );

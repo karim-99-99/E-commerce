@@ -1,6 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { logoutUser } from "../services/api";
+import { useNavigate } from "react-router-dom";
 function Home() {
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    await logoutUser();
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
   return (
     <div className="min-h-screen w-full ">
       <nav className="grid grid-cols-3 w-80 ml-auto text-orange-600 text-xl font-semibold ">
@@ -9,6 +17,7 @@ function Home() {
         </Link>
         <Link to="/service">Service</Link>
         <Link to="/about">About</Link>
+        <button onClick={handleLogout} className="justify-self-end">Logout</button>
       </nav>
       <div className="grid grid-cols-1 md:grid-cols-2 pt-10">
         <div className="">
