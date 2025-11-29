@@ -1,35 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Navigation from "./Navigation";
 
 function About() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50">
-      {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-md shadow-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-1">
-              <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
-                ShopHouse
-              </span>
-            </div>
-            <div className="flex items-center space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
-                Home
-              </Link>
-              <Link to="/service" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
-                Products
-              </Link>
-              <Link to="/about" className="text-orange-600 font-semibold border-b-2 border-orange-600">
-                About
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navigation />
 
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 md:pt-28 md:pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold">

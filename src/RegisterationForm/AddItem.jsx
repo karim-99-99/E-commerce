@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import UploadPhoto from "../Features/UploadPhoto";
 import { addProduct, updateProduct, fetchCategories, addCategory, deleteCategory } from "../services/api";
+import ConfirmModal from "../components/ConfirmModal";
+import Navigation from "../components/Navigation";
 
 function AddItem() {
   const navigate = useNavigate();
@@ -19,6 +21,8 @@ function AddItem() {
   const [successMessage, setSuccessMessage] = useState("");
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [showDeleteCategoryModal, setShowDeleteCategoryModal] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -158,50 +162,35 @@ function AddItem() {
     }
   };
 
-  const handleDeleteCategory = async (categoryId) => {
-    if (!window.confirm("Are you sure you want to delete this category?")) {
-      return;
-    }
+  const handleDeleteCategoryClick = (categoryId, categoryName) => {
+    setCategoryToDelete({ id: categoryId, name: categoryName });
+    setShowDeleteCategoryModal(true);
+  };
+
+  const handleConfirmDeleteCategory = async () => {
+    if (!categoryToDelete) return;
 
     try {
-      await deleteCategory(categoryId);
+      await deleteCategory(categoryToDelete.id);
       await loadCategories(); // Reload categories
       setSuccessMessage("✅ Category deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
       // Clear category selection if deleted category was selected
-      if (input.category === categoryId.toString()) {
+      if (input.category === categoryToDelete.id.toString()) {
         setInput((prev) => ({ ...prev, category: "" }));
       }
+      setShowDeleteCategoryModal(false);
+      setCategoryToDelete(null);
     } catch (err) {
       setError({ category: err.message || "Failed to delete category" });
+      setShowDeleteCategoryModal(false);
+      setCategoryToDelete(null);
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50">
-      {/* Enhanced Navigation */}
-      <nav className="bg-white/90 backdrop-blur-md shadow-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-1">
-              <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
-                ShopHouse
-              </span>
-            </div>
-            <div className="flex items-center space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
-                Home
-              </Link>
-              <Link to="/service" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
-                Products
-              </Link>
-              <Link to="/about" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
-                About
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navigation />
 
       {editingProduct && (
         <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mx-auto w-3/5 mt-4">
@@ -221,7 +210,7 @@ function AddItem() {
       )}
 
       {/* Page Header */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
         <h1 className="text-4xl font-extrabold bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent mb-2">
           {editingProduct ? "Edit Product" : "Add New Product"}
         </h1>
@@ -342,7 +331,7 @@ function AddItem() {
                       <span className="text-sm font-medium text-gray-700">{cat.name}</span>
                       <button
                         type="button"
-                        onClick={() => handleDeleteCategory(cat.id)}
+                        onClick={() => handleDeleteCategoryClick(cat.id, cat.name)}
                         className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold transition-all"
                         title="Delete category"
                       >
@@ -475,6 +464,21 @@ function AddItem() {
           </form>
         </div>
       </div>
+
+      {/* Delete Category Confirmation Modal */}
+      <ConfirmModal
+        isOpen={showDeleteCategoryModal}
+        onClose={() => {
+          setShowDeleteCategoryModal(false);
+          setCategoryToDelete(null);
+        }}
+        onConfirm={handleConfirmDeleteCategory}
+        title="Delete Category"
+        message={categoryToDelete ? `Are you really sure you want to delete the category "${categoryToDelete.name}"? This action cannot be undone.` : ""}
+        confirmText="Delete"
+        cancelText="Cancel"
+        type="danger"
+      />
     </div>
   );
 }

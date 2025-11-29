@@ -11,6 +11,7 @@ import PhotoUpload from "./components/PhotoUpload";
 import UploadPhoto from "./Features/UploadPhoto";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import ProductDetail from "./components/ProductDetail";
 import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./components/AdminRoute";
 
@@ -31,6 +32,16 @@ function App() {
             element={
               <PrivateRoute>
                 <Service />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Product Detail Page */}
+          <Route
+            path="/product/:productId"
+            element={
+              <PrivateRoute>
+                <ProductDetail />
               </PrivateRoute>
             }
           />

@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchProducts, fetchByCategory, fetchCategories, deleteProduct, isAdmin } from "../services/api"; // API functions
 import { getProductImages } from "../services/fakeApi";
+import { addToCart } from "../services/cartService";
+import ConfirmModal from "./ConfirmModal";
+import Navigation from "./Navigation";
 
 // Product Card Component with Image Carousel on Hover
-function ProductCard({ product, onItemClick, onEdit, onDelete, isAdmin }) {
+function ProductCard({ product, onItemClick, onEdit, onDelete, isAdmin, onAddToCart }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const images = getProductImages(product);
 
   useEffect(() => {
@@ -36,11 +40,19 @@ function ProductCard({ product, onItemClick, onEdit, onDelete, isAdmin }) {
     onEdit(product);
   };
 
-  const handleDelete = async (e) => {
+  const handleDelete = (e) => {
     e.stopPropagation();
-    if (window.confirm(`Are you sure you want to delete "${product.name}"?`)) {
-      await onDelete(product.id);
-    }
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    await onDelete(product.id);
+    setShowDeleteModal(false);
+  };
+
+  const handleAddToCartClick = (e) => {
+    e.stopPropagation();
+    onAddToCart(product);
   };
 
   return (
@@ -61,7 +73,7 @@ function ProductCard({ product, onItemClick, onEdit, onDelete, isAdmin }) {
         />
         {/* Image Indicators */}
         {images.length > 1 && (
-          <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-2 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full">
+          <div className="absolute bottom-14 left-1/2 transform -translate-x-1/2 flex gap-2 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full z-10">
             {images.map((_, index) => (
               <div
                 key={index}
@@ -75,9 +87,20 @@ function ProductCard({ product, onItemClick, onEdit, onDelete, isAdmin }) {
           </div>
         )}
         {/* Price Badge */}
-        <div className="absolute top-3 right-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white px-3 py-1 rounded-full font-bold text-sm shadow-lg">
+        <div className="absolute top-3 right-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white px-3 py-1 rounded-full font-bold text-sm shadow-lg z-10">
           ${product.price}
         </div>
+        
+        {/* Add to Cart Button */}
+        <button
+          onClick={handleAddToCartClick}
+          className="absolute bottom-3 right-3 bg-green-500 hover:bg-green-600 text-white rounded-full p-3 shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-200 z-10 group/add"
+          title="Add to cart"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+          </svg>
+        </button>
       </div>
 
       {/* Product Info */}
@@ -118,6 +141,18 @@ function ProductCard({ product, onItemClick, onEdit, onDelete, isAdmin }) {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Product"
+        message={`Are you really sure you want to delete "${product.name}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        type="danger"
+      />
     </div>
   );
 }
@@ -129,6 +164,7 @@ function Service() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [admin, setAdmin] = useState(false);
+  const [showAddToCartMessage, setShowAddToCartMessage] = useState(null);
   const navigate = useNavigate();
 
   // 🟧 Available categories - loaded from fake API
@@ -203,16 +239,28 @@ function Service() {
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // When a product is clicked
+  // When a product is clicked - navigate to product detail page
   const handleItemClick = (product) => {
-    sessionStorage.setItem("selectedProduct", JSON.stringify(product));
-    navigate("/service/registration");
+    navigate(`/product/${product.id}`);
+  };
+
+  // Add to cart handler
+  const handleAddToCart = (product) => {
+    addToCart(product, 1);
+    setShowAddToCartMessage(product.name);
+    setTimeout(() => setShowAddToCartMessage(null), 2000);
   };
 
   // Handle edit product
   const handleEdit = (product) => {
-    sessionStorage.setItem("editingProduct", JSON.stringify(product));
-    navigate("/add-item");
+    try {
+      console.log("Editing product:", product);
+      sessionStorage.setItem("editingProduct", JSON.stringify(product));
+      navigate("/add-item");
+    } catch (error) {
+      console.error("Error editing product:", error);
+      setError("Failed to edit product. Please try again.");
+    }
   };
 
   // Handle delete product
@@ -228,52 +276,16 @@ function Service() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50">
-      {/* Enhanced Navbar */}
-      <nav className="bg-white/90 backdrop-blur-md shadow-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 py-4">
-            <div className="flex items-center space-x-6">
-              <Link to="/" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
-                Home
-              </Link>
-              <Link to="/service" className="text-orange-600 font-semibold border-b-2 border-orange-600">
-                Products
-              </Link>
-              <Link to="/about" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
-                About
-              </Link>
-            </div>
-            
-            {/* Search and Filter */}
-            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <div className="relative flex-1 sm:flex-initial">
-                <input
-                  type="text"
-                  placeholder="🔍 Search products..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full sm:w-64 pl-10 pr-4 py-2 rounded-full border-2 border-gray-200 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 transition-all text-sm"
-                />
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">🔍</span>
-              </div>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 rounded-full border-2 border-gray-200 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200 bg-white text-gray-700 font-medium cursor-pointer transition-all"
-              >
-                {filteredCategories.map((category) => (
-                  <option key={category.slug} value={category.slug}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navigation 
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        categories={filteredCategories}
+      />
 
       {/* Page Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
@@ -296,6 +308,16 @@ function Service() {
           </div>
         )}
 
+        {/* Add to Cart Success Message */}
+        {showAddToCartMessage && (
+          <div className="fixed top-20 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in">
+            <div className="flex items-center space-x-2">
+              <span>✅</span>
+              <span>{showAddToCartMessage} added to cart!</span>
+            </div>
+          </div>
+        )}
+
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12">
         {filteredProducts.length === 0 && !loading && (
@@ -313,6 +335,7 @@ function Service() {
             onItemClick={handleItemClick}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onAddToCart={handleAddToCart}
             isAdmin={admin}
           />
         ))}

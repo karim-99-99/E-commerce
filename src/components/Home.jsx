@@ -1,76 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { logoutUser, isAdmin } from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { isAdmin } from "../services/api";
+import Navigation from "./Navigation";
 
 function Home() {
-  const navigate = useNavigate();
   const admin = isAdmin();
-  
-  const handleLogout = async () => {
-    await logoutUser();
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
   
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-orange-50 via-white to-orange-50">
-      {/* Enhanced Navigation */}
-      <nav className="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-1">
-              <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
-                ShopHouse
-              </span>
-            </div>
-            <div className="hidden md:flex items-center space-x-8">
-              <Link 
-                to="/" 
-                className="text-gray-700 hover:text-orange-600 font-medium transition-colors duration-200"
-              >
-                Home
-              </Link>
-              <Link 
-                to="/service" 
-                className="text-gray-700 hover:text-orange-600 font-medium transition-colors duration-200"
-              >
-                Products
-              </Link>
-              <Link 
-                to="/about" 
-                className="text-gray-700 hover:text-orange-600 font-medium transition-colors duration-200"
-              >
-                About
-              </Link>
-              <button 
-                onClick={handleLogout} 
-                className="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200"
-              >
-                Logout
-              </button>
-            </div>
-            {/* Mobile Menu */}
-            <div className="md:hidden flex items-center space-x-3">
-              <Link 
-                to="/service" 
-                className="text-gray-700 hover:text-orange-600 text-sm font-medium"
-              >
-                Products
-              </Link>
-              <button 
-                onClick={handleLogout} 
-                className="text-red-600 text-sm font-medium px-3 py-1.5 hover:bg-red-50 rounded-lg transition-colors"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+      <Navigation />
+      
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 md:pt-28 md:pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
           <div className="text-center lg:text-left space-y-6 animate-fade-in">
