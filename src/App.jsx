@@ -12,6 +12,7 @@ import UploadPhoto from "./Features/UploadPhoto";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import PrivateRoute from "./components/PrivateRoute";
+import AdminRoute from "./components/AdminRoute";
 
 function App() {
   return (
@@ -47,9 +48,9 @@ function App() {
           <Route
             path="/add-item"
             element={
-              <PrivateRoute>
+              <AdminRoute>
                 <AddItem />
-              </PrivateRoute>
+              </AdminRoute>
             }
           />
 

@@ -1,70 +1,117 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 function About() {
   return (
-    <div>
-      <nav className="grid grid-cols-3 md:w-80 ml-auto text-orange-600 text-xl font-semibold pb-10">
-        <Link to="/">Home</Link>
-        <Link to="/Service">Service</Link>
-        <Link to="/About">About</Link>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50">
+      {/* Navigation */}
+      <nav className="bg-white/90 backdrop-blur-md shadow-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-1">
+              <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
+                ShopHouse
+              </span>
+            </div>
+            <div className="flex items-center space-x-8">
+              <Link to="/" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
+                Home
+              </Link>
+              <Link to="/service" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
+                Products
+              </Link>
+              <Link to="/about" className="text-orange-600 font-semibold border-b-2 border-orange-600">
+                About
+              </Link>
+            </div>
+          </div>
+        </div>
       </nav>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:m-16 lg:-mt-10 ">
-        <p className="flex justify-center lg:m-16 md:text-lg font-semibold ">
-          Our e-commerce platform offers a wide range of products including
-          electronics, fashion, home goods, and more — all in one place. We
-          provide a convenient, secure, and fast shopping experience with
-          detailed product information, customer reviews, and multiple payment
-          options. Customers enjoy regular discounts, free shipping on select
-          orders, and easy return policies to ensure satisfaction with every
-          purchase.
-        </p>
-        <img
-          src="https://f.hellowork.com/blogdumoderateur/2023/05/ECommerce-Fevad-2023-.jpg"
-          alt="e-commerce Company"
-          className="rounded-xl lg:h-96 md:ml-10 md:mt-28 lg:mt-10 md:mr-10 h-auto w-auto "
-        />
+
+      {/* Hero Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold">
+              <span className="bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
+                About
+              </span>
+              <span className="text-gray-800"> Us</span>
+            </h1>
+            <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
+              Our e-commerce platform offers a wide range of products including
+              electronics, fashion, home goods, and more — all in one place. We
+              provide a convenient, secure, and fast shopping experience with
+              detailed product information, customer reviews, and multiple payment
+              options. Customers enjoy regular discounts, free shipping on select
+              orders, and easy return policies to ensure satisfaction with every
+              purchase.
+            </p>
+          </div>
+          <div className="relative">
+            <img
+              src="https://f.hellowork.com/blogdumoderateur/2023/05/ECommerce-Fevad-2023-.jpg"
+              alt="e-commerce Company"
+              className="rounded-2xl shadow-2xl w-full h-auto"
+            />
+            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-orange-200 rounded-full opacity-50 blur-2xl"></div>
+          </div>
+        </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-14 pr-6 ">
-        <span className="flex flex-col justify-center items-center">
-          <img
-            src="https://cdn.pixabay.com/photo/2023/02/24/00/41/ai-generated-7809880_960_720.jpg"
-            alt="ceo photo"
-            className="rounded-full h-28 md:h-52 w-28 md:w-56 ml-10 "
-          />
-          <div className="pt-5 pl-9">
-          <p className="md:text-xl font-semibold ">Adam Khalil</p>
-          <p className="font-semibold">CEO</p>
-          </div>
-        </span>
-        <span className="flex flex-col justify-center items-center">
-          <img
-            src="https://images.hindustantimes.com/tech/img/2023/01/19/1600x900/AI_generated_art_1674113313038_1674113318035_1674113318035.jpg"
-            alt="coo photo"
-            className="rounded-full h-28 md:h-52 w-28 md:w-56 ml-10 "
-          />
-          <div className="pt-5 pl-9">
-          <p className="md:text-xl font-semibold">Lina Saeed</p>
-          <p className="font-semibold">COO</p>
-          </div>
-        </span>
-        <span className="flex flex-col justify-center items-center">
-          <img
-            src="https://cdn.pixabay.com/photo/2023/02/08/14/02/ai-generated-7776701_640.jpg"
-            alt="cmo photo"
-            className="rounded-full h-28 md:h-52 w-28 md:w-56 ml-10"
-          />
-          <div className="pt-5 pl-9 ">
-          <p className="md:text-xl font-semibold"> Omar Hassan</p>
-          <p className="font-semibold">CMO</p>
-          </div>
-        </span>
+
+      {/* Team Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+          <span className="bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
+            Our Team
+          </span>
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { name: "Adam Khalil", role: "CEO", img: "https://cdn.pixabay.com/photo/2023/02/24/00/41/ai-generated-7809880_960_720.jpg" },
+            { name: "Lina Saeed", role: "COO", img: "https://images.hindustantimes.com/tech/img/2023/01/19/1600x900/AI_generated_art_1674113313038_1674113318035_1674113318035.jpg" },
+            { name: "Omar Hassan", role: "CMO", img: "https://cdn.pixabay.com/photo/2023/02/08/14/02/ai-generated-7776701_640.jpg" }
+          ].map((member, index) => (
+            <div key={index} className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 text-center transform hover:-translate-y-2">
+              <div className="relative inline-block mb-4">
+                <img
+                  src={member.img}
+                  alt={member.role}
+                  className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-orange-200 shadow-lg"
+                />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-orange-400/20 to-transparent"></div>
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-1">{member.name}</h3>
+              <p className="text-orange-600 font-semibold">{member.role}</p>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="m-14 flex flex-col justify-center items-center">
-        <h2 className="border-2   p-5 rounded-3xl bg-orange-500 text-3xl font-semibold text-white font-serif mb-3">Customer Opinion</h2>
-        <p className="border-1 border-black mt-2 p-3  bg-white text-l font-semibold text-black rounded-lg mb-3">Great variety of products and fast delivery.</p>
-        <p className="border- border-black mt-2 p-3  bg-white text-l font-semibold text-black rounded-lg mb-3">Easy to use website with good deals.</p>
-        <p className="border- border-black mt-2 p-3  bg-white text-l font-semibold text-black rounded-lg">Reliable service and smooth shopping experience.</p>
-        <p className="border- border-black mt-2 p-3  bg-white text-l font-semibold text-black rounded-lg">..............</p>
+
+      {/* Customer Reviews */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+          <span className="bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
+            Customer Reviews
+          </span>
+        </h2>
+        <div className="space-y-4">
+          {[
+            "Great variety of products and fast delivery.",
+            "Easy to use website with good deals.",
+            "Reliable service and smooth shopping experience."
+          ].map((review, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 border-l-4 border-orange-500"
+            >
+              <div className="flex items-start">
+                <div className="text-2xl mr-4">⭐</div>
+                <p className="text-gray-700 font-medium flex-1">{review}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
