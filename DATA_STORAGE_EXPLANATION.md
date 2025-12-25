@@ -168,3 +168,4 @@ To verify data persists:
 
 **Your data is saved in your browser's localStorage, which is stored in your browser's data folder on your computer. It persists across sessions but is local to your browser and device.**
 
+

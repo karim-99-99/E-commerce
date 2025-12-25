@@ -84,3 +84,4 @@ Regular users (non-admin) can:
 - ❌ Cannot access `/add-item` page
 - ❌ Cannot edit or delete products
 
+
